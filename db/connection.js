@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 require('dotenv').config({
   path: `${__dirname}/../${ENV}.env`,
 });
-console.log(process.env)
+
 if (!process.env.MONGODB_URI) {
   throw new Error('MONGODB_URI not set');
 }

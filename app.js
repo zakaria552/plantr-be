@@ -7,6 +7,7 @@ app.use(express.json());
 app.use(cors())
 
 app.get("/users/:userid", async (req, res, next) => {
+    console.log("------>")
     const userId = req.params.userid
     try {
         if(!userId) next({ satus: 400, message: "missing user id"})

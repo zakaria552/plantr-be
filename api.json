@@ -3,6 +3,9 @@
         "description": "servers list of plants",
         "queries": ["total"]
     },
+    "GET /plants/:plantId": {
+        "description": "servers single plant"
+    },
     "GET /users/:userId" : {
         "description": "servers a user collection"
     },

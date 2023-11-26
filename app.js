@@ -63,6 +63,19 @@ app.post("/users/:userId/plants", async (req, res, next) => {
     }
 
 })
+app.put("/users/:userId/plants/:plantId", async (req, res, next) => {
+    const { userId, plantId } = req.params
+    if(!userId) return next({ status: 400, message: "Missing user id"}) 
+    if(!plantId) return next({status: 400, message: "Missing plantId"})
+    try {
+        console.log("----_>",plantId, userId)
+        const updatedPlant = await mongoDb.userModel.updatePlant(userId, plantId, req.body)
+        res.status(201).send(updatedPlant)
+    } catch(e) {
+        console.log(e)
+        next(e)
+    }
+})
 app.get("/plants", async (req, res, next) => {
     const { total } = req.query
     try {

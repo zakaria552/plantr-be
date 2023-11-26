@@ -45,6 +45,35 @@ class User {
             throw e
         }
     }
+    async getPlantById(userId, plantId) {
+        try {
+            const plants = await this.getPlants(userId)
+            const index = plants.findIndex(plant => plant.plantId == plantId)
+            if(index === -1)  return Promise.reject({ status: 404, message: "plant not found"})
+            return plants[index]
+        } catch(e) {
+            throw e
+        }
+
+    }
+    async updatePlant(userId, plantId, lastWatered) {
+        try {
+            const plant = await this.getPlantById(userId, plantId)
+            plant.lastWatered = lastWatered
+            console.log(plant)
+            const plants = await this.getPlants(userId)
+            console.log(plants)
+            const index = plants.findIndex(plant => plant.plantId == plantId)
+            console.log(index)
+            plants.splice(index,1,plant);
+            console.log(plants)
+            await UsersModel.findOneAndUpdate({_id: userId}, {plants})
+            return plant
+        } catch(e) {
+            console.log(e)
+            throw e
+        }
+    }
 }
 
 

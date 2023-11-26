@@ -1,0 +1,26 @@
+{
+    "GET /plants": {
+        "description": "servers list of plants",
+        "queries": ["total"]
+    },
+    "GET /users/:userId" : {
+        "description": "servers a user collection"
+    },
+    "GET /users/emails/:email": {
+        "description": "Servers a user collection"
+    }, 
+    "POST /users": {
+        "description": "Creates user collection",
+        "required body fields": "name, email, passwordHash"
+    },
+    "GET /users/:userId/plants": {
+        "description": "servers list of user's plants list"
+    },
+    "POST /users/:userId/plants": {
+        "description": "adds a plant to user's plants list"
+    },
+    "PUT /users/:userId/plants/:plantId": {
+        "description": "updates a plant's lastWatered field from users plant list",
+        "required body fields": "lastWatered"
+    }
+}

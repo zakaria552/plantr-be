@@ -1,9 +1,8 @@
 const UsersModel = require("../db/schema/user");
-
 class User {
     async getUser(userId) {
         try {
-            const user = await UsersModel.findOne({userId})
+            const user = await UsersModel.findOne({_id: userId})
             if(!user) return Promise.reject({ status: 404, message: "user not found"})
             return user
         } catch(e) {
@@ -11,9 +10,20 @@ class User {
         }
 
     }
-    async createUser({userId, name}) {
+    async getUserByEmail(email) {
         try {
-            return await UsersModel.create({ userId, name})
+            const user = UsersModel.findOne({email})
+            if(!user) return Promise.reject({ status: 404, message: "user not found"})
+            return user
+        } catch(e) {
+            throw e
+        }
+    }
+    async createUser({email, passwordHash, name}) {
+        try {
+            const user = UsersModel.findOne({email})
+            if(user) return Promise.reject({ status: 400, message: "user already exists"})
+            return await UsersModel.create({ name, email, passwordHash})
         } catch (e) {
             throw e
         }
@@ -28,7 +38,7 @@ class User {
     }
     async addPlant(userId, plant) {
         try {
-            await UsersModel.findOneAndUpdate({userId}, { $push: { plants: plant } })
+            await UsersModel.findOneAndUpdate({_id: userId}, { $push: { plants: plant } })
             const plants = await this.getPlants(userId)
             return plants.at(-1)
         } catch(e) {

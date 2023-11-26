@@ -16,12 +16,21 @@ app.get("/users/:userid", async (req, res, next) => {
         next(e)
     }
 })
-
-app.post("/users", async (req, res, next) => {
-    const {userId, name} = req.body
-    if(!userId || !name) return next({ status: 400, message: "Missing user id or name"})
+app.get("/users/emails/:email", async (req, res, next) => {
+    const { email } = req.params
     try {
-        const createdUser = await mongoDb.userModel.createUser({ userId, name})
+        const user = await mongoDb.userModel.getUserByEmail(email)
+        res.status(200).send(user)
+    } catch(e) {
+        console.log(e)
+        next(e)
+    }
+})
+app.post("/users", async (req, res, next) => {
+    const {name, email, passwordHash} = req.body
+    if(!name || !email || !passwordHash) return next({ status: 400, message: "Missing name, passwordHash or email"})
+    try {
+        const createdUser = await mongoDb.userModel.createUser({ name, email, passwordHash})
         res.status(201).send(createdUser)
     } catch(e) {
         next(e)

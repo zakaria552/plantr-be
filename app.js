@@ -85,6 +85,15 @@ app.get("/plants", async (req, res, next) => {
         next(e)
     }
 })
+app.get("/plants/:plantId", async (req, res, next) => {
+    const {plantId} = req.params
+    try {
+        const plant = await mongoDb.plantModel.getPlantById(plantId)
+        res.status(200).send(plant)
+    } catch(e) {
+        next(e)
+    }
+})
 app.use((err, req, res, next) => {
     if(err.status && err.message) {
         res.status(err.status).send({ message: err.message})

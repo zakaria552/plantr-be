@@ -9,6 +9,14 @@ class Plant {
             throw e
         }
     }
+    async getPlantById(plantId) {
+        try {
+            const plant = await PlantModel.find({plantId})
+            return plant
+        } catch(e) {
+            throw e
+        }
+    }
 }
 
 module.exports =  Plant

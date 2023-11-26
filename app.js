@@ -54,7 +54,15 @@ app.post("/users/:userId/plants", async (req, res, next) => {
     }
 
 })
-
+app.get("/plants", async (req, res, next) => {
+    const { total } = req.query
+    try {
+        const plants = await mongoDb.plantModel.getPlants(total)
+        res.status(200).send(plants)
+    } catch(e) {
+        next(e)
+    }
+})
 app.use((err, req, res, next) => {
     if(err.status && err.message) {
         res.status(err.status).send({ message: err.message})

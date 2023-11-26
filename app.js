@@ -51,12 +51,12 @@ app.get("/users/:userId/plants", async (req, res, next) => {
 
 app.post("/users/:userId/plants", async (req, res, next) => {
     const { userId } = req.params
-    const { plantId, imgUrl, description, name, watering } = req.body
+    const { plant } = req.body
     if(!userId) return next({ status: 400, message: "Missing user id"})
-    if(!imgUrl || !name || !plantId) return next({status: 400, message: "Missing imgUrl, plantId or name"})
-    const plant = { plantId, name, imgUrl, description: description || "", watering: watering || "", lastWatered: ""}
+    if(!plant) return next({status: 400, message: "Missing plant"})
+    const plantFormated = {...plant, lastWatered: ""}
     try {
-        const addedPlant = await mongoDb.userModel.addPlant(userId, plant)
+        const addedPlant = await mongoDb.userModel.addPlant(userId, plantFormated)
         res.status(201).send(addedPlant)
     } catch(e) {
         next(e)
@@ -65,14 +65,14 @@ app.post("/users/:userId/plants", async (req, res, next) => {
 })
 app.put("/users/:userId/plants/:plantId", async (req, res, next) => {
     const { userId, plantId } = req.params
+    const {lastWatered} = req.body
     if(!userId) return next({ status: 400, message: "Missing user id"}) 
     if(!plantId) return next({status: 400, message: "Missing plantId"})
+    if(!lastWatered) return next({status: 400, message: "Missing lastWatered"})
     try {
-        console.log("----_>",plantId, userId)
-        const updatedPlant = await mongoDb.userModel.updatePlant(userId, plantId, req.body)
+        const updatedPlant = await mongoDb.userModel.updatePlant(userId, plantId, lastWatered)
         res.status(201).send(updatedPlant)
     } catch(e) {
-        console.log(e)
         next(e)
     }
 })

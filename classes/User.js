@@ -12,7 +12,7 @@ class User {
     }
     async getUserByEmail(email) {
         try {
-            const user = UsersModel.findOne({email})
+            const user = await UsersModel.findOne({email})
             if(!user) return Promise.reject({ status: 404, message: "user not found"})
             return user
         } catch(e) {
@@ -21,7 +21,7 @@ class User {
     }
     async createUser({email, passwordHash, name}) {
         try {
-            const user = UsersModel.findOne({email})
+            const user = await UsersModel.findOne({email})
             if(user) return Promise.reject({ status: 400, message: "user already exists"})
             return await UsersModel.create({ name, email, passwordHash})
         } catch (e) {
